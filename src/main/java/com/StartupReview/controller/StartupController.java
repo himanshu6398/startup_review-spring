@@ -55,7 +55,8 @@ public class StartupController {
                     logger.info("[SEARCH REQUEST] - Requesting from tag data "+tagData);
                     return ResponseEntity.ok(listofStartups);
         } else if(searchData != null && tagData == null){
-            Page<Startup> listofStartups =  startupService.getstartupsFromSearchData(searchData,paging);
+//            Page<Startup> listofStartups =  startupService.getstartupsFromSearchData(searchData,paging);
+            Page<Startup> listofStartups =  startupService.getStartupsFromTagDataAndSearchData(searchData,searchData,paging);
             logger.info("[SEARCH REQUEST] - search value: "+searchData);
             return ResponseEntity.ok(listofStartups);
         } else {
