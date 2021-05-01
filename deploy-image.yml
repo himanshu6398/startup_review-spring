@@ -16,4 +16,4 @@
           - "8081:8081"
         networks:
           - name: app-default
-        restart_policy: always
+#         restart_policy: always
