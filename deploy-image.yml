@@ -4,12 +4,12 @@
   tasks:
     - name: Pull app image
       docker_image:
-        name: rajatkumariiitb/startup_review-spring
+        name: himanshu6398/startup_review-spring
         source: pull
     - name: Running the container
       docker_container:
         name: startupreview-spring
-        image: rajatkumariiitb/startup_review-spring:latest
+        image: himanshu6398/startup_review-spring:latest
         state: started
         restart: yes
         ports:
