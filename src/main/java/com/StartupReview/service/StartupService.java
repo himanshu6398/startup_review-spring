@@ -53,7 +53,7 @@ public class StartupService {
             return startupRepository.findByTagsContaining(tag,paging);
     }
     public Page<Startup> getStartupsFromTagDataAndSearchData(String searchData,String tag,Pageable pageable){
-        return startupRepository.findByNameContainingOrDescriptionOrTagsContaining(searchData,searchData,tag,pageable);
+        return startupRepository.findByNameContainingOrDescriptionContainingOrTagsContaining(searchData,searchData,tag,pageable);
     }
 
     public List<Startup> findStartupByUser(Long user_id) {

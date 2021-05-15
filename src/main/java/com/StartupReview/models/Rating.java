@@ -7,6 +7,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(	name = "ratings")
@@ -17,6 +19,7 @@ public class Rating {
     private Long id;
 
     @NotBlank
+    @Size(max=255)
     private String title;
 
     private Float rating;
@@ -39,7 +42,23 @@ public class Rating {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "rating", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Comment> comments;
+
+
+
     public Rating(@NotBlank String title, @NotBlank Float rating, @NotBlank String description, @NotBlank LocalDateTime dateTime, @NotBlank Startup startup, @NotBlank User user) {
+        this.title = title;
+        this.rating = rating;
+        this.description = description;
+        this.dateTime = dateTime;
+        this.startup = startup;
+        this.user = user;
+    }
+
+    public Rating(Long id, @NotBlank String title, Float rating, @NotBlank String description, LocalDateTime dateTime, Startup startup, User user) {
+        this.id = id;
         this.title = title;
         this.rating = rating;
         this.description = description;
@@ -50,6 +69,18 @@ public class Rating {
 
     public Rating() { }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Rating rating1 = (Rating) o;
+        return id.equals(rating1.id) && title.equals(rating1.title) && rating.equals(rating1.rating);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, rating);
+    }
 
     public Long getId() {
         return id;
@@ -105,5 +136,13 @@ public class Rating {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }

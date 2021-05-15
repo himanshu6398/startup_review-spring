@@ -20,10 +20,11 @@ import java.util.Optional;
 public class RatingService {
 
     @Autowired
-    RatingRepository ratingRepository;
+    private RatingRepository ratingRepository;
 
-    @Autowired
-    StartupRepository startupRepository;
+    public RatingService(RatingRepository ratingRepository) {
+        this.ratingRepository = ratingRepository;
+    }
 
     public Rating saveRating(Rating rating){
         return ratingRepository.save(rating);
@@ -58,8 +59,5 @@ public class RatingService {
 
     }
 
-    public Optional<Rating> getratingsById(long id) {
-        return ratingRepository.findById(id);
 
-    }
 }

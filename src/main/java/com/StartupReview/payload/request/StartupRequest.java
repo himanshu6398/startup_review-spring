@@ -17,6 +17,9 @@ public class StartupRequest {
     @NotBlank
     private String tags;
 
+    @NotBlank
+    private String logoLink;
+
 
 
     public String getName() {
@@ -49,5 +52,13 @@ public class StartupRequest {
 
     public void setTags(String tags) {
         this.tags = tags;
+    }
+
+    public String getLogoLink() {
+        return logoLink;
+    }
+
+    public void setLogoLink(String logoLink) {
+        this.logoLink = logoLink;
     }
 }

@@ -55,8 +55,8 @@ public class StartupController {
                     logger.info("[SEARCH REQUEST] - Requesting from tag data "+tagData);
                     return ResponseEntity.ok(listofStartups);
         } else if(searchData != null && tagData == null){
-//            Page<Startup> listofStartups =  startupService.getstartupsFromSearchData(searchData,paging);
-            Page<Startup> listofStartups =  startupService.getStartupsFromTagDataAndSearchData(searchData,searchData,paging);
+            Page<Startup> listofStartups =  startupService.getstartupsFromSearchData(searchData,paging);
+//            Page<Startup> listofStartups =  startupService.getStartupsFromTagDataAndSearchData(searchData,searchData,paging);
             logger.info("[SEARCH REQUEST] - search value: "+searchData);
             return ResponseEntity.ok(listofStartups);
         } else {
@@ -100,7 +100,7 @@ public class StartupController {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); //if month entered in full-text like 'january', use MMMM
             Date launchDate = format.parse(string);
 
-            Startup startup = new Startup(startupRequest.getName().toLowerCase(), startupRequest.getDescription(), user, launchDate, LocalDateTime.now(),startupRequest.getTags());
+            Startup startup = new Startup(startupRequest.getName().toLowerCase(), startupRequest.getDescription(), user, launchDate, LocalDateTime.now(),startupRequest.getTags(),startupRequest.getLogoLink());
 //            startup.setUser(user);
 //            startup.setName(startup.getName().toLowerCase());
 //            startup.setDateTime( LocalDateTime.now());
@@ -143,6 +143,7 @@ public class StartupController {
         s.setLaunchDate(launchDate);
         s.setDateTime(LocalDateTime.now());
         s.setTags(startupRequest.getTags());
+        s.setLogoLink(startupRequest.getLogoLink());
 
         Startup result = startupService.saveStartup(s);
 

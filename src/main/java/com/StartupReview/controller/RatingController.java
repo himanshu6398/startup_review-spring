@@ -1,11 +1,11 @@
 package com.StartupReview.controller;
 
+import com.StartupReview.models.Comment;
 import com.StartupReview.models.Rating;
 import com.StartupReview.models.Startup;
 import com.StartupReview.models.User;
 import com.StartupReview.payload.request.RatingRequest;
-import com.StartupReview.payload.response.MessageResponse;
-import com.StartupReview.payload.response.StartupRatingResponse;
+import com.StartupReview.payload.response.*;
 import com.StartupReview.security.services.UserDetailsImpl;
 
 import com.StartupReview.service.RatingService;
@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -148,9 +150,16 @@ public class RatingController {
                                         @RequestParam(defaultValue = "3") int size){
         Pageable paging = PageRequest.of(page, size);
         Page<Rating> listofReviews = ratingService.getRatings(Long.parseLong(startupId),paging);
-        if(listofReviews != null)
-            return ResponseEntity.ok(listofReviews);
-        else {
+        ArrayList<RatingResponse> ratingResponses=new ArrayList<RatingResponse>();
+        if(listofReviews != null) {
+            for (int i = 0; i < listofReviews.getContent().size(); i++) {
+                Rating rating = listofReviews.getContent().get(i);
+                ratingResponses.add(new RatingResponse(rating, rating.getStartup().getName(), rating.getUser().getName()));
+
+            }
+            return ResponseEntity.ok(new PagingResponse(ratingResponses, listofReviews.getTotalElements(), listofReviews.getTotalPages()));
+
+        } else {
             logger.error("[NO RECORD FOUND] - Review info unable to get");
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Unable to get reviews!!"));
         }
@@ -165,11 +174,14 @@ public class RatingController {
 
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getRatingsbyId(@PathVariable("id") long id ){
-        Optional<Rating> rating = ratingService.getratingsById(id);
+    @GetMapping("/")
+    public ResponseEntity<?> getRatingsbyId(@RequestParam long id){
+        Optional<Rating> rating = ratingService.getRatingById(id);
         if(rating.isPresent()){
-            return ResponseEntity.ok(rating.get());
+            String startup = rating.get().getStartup().getName();
+            System.out.println(startup);
+            RatingResponse ratingResponse = new RatingResponse(rating.get(),startup,rating.get().getUser().getName());
+            return ResponseEntity.ok(ratingResponse);
         } else {
             logger.error("[NO RECORD FOUND] - Review info does not exist");
             return ResponseEntity

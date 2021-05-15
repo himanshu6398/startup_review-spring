@@ -31,4 +31,6 @@ public interface RatingRepository extends JpaRepository<Rating,Long> {
     @Query("SELECT r FROM Rating r WHERE r.startup.id=?1 order by r.dateTime desc ")
     Page<Rating> FindByStartupOrderByDateTimeDesc(Long startupId, Pageable pageable);
 
+    Optional<Rating> findByTitle(String title);
+
 }
