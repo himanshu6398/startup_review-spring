@@ -49,7 +49,14 @@ public class CommentController {
     @GetMapping("/getFirst3Comments")
     public ResponseEntity<?> getFirst3Comments(@RequestParam long rating_id){
             List<Comment> listOfCommnents =  commentService.getFirstComments(rating_id,3);
-            return ResponseEntity.ok(listOfCommnents);
+            ArrayList<CommentResponse> commentResponses=new ArrayList<CommentResponse>();
+
+        for (int i = 0; i < listOfCommnents.size(); i++) {
+            Comment comment = listOfCommnents.get(i);
+            commentResponses.add(new CommentResponse(comment,comment.getUser().getName(),comment.getUser().getId()));
+        }
+        return ResponseEntity.ok(commentResponses);
+
     }
     @GetMapping("/getCommentFromId")
     public ResponseEntity<?> getCommentFromId(@RequestParam long comment_id){

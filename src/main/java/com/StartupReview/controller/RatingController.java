@@ -94,7 +94,7 @@ public class RatingController {
         rating.setDescription(review.getDescription());
         rating.setUser(user);
         rating.setStartup(startup);
-        rating.setDateTime(LocalDateTime.now());
+//        rating.setDateTime(LocalDateTime.now());
 
         Rating result = ratingService.saveRating(rating);
         if(result != null ){
